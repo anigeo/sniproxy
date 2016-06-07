@@ -6,6 +6,12 @@ the initial request of the TCP session. This enables HTTPS name-based virtual
 hosting to separate backend servers without installing the private key on the
 proxy machine.
 
+Difference from dlundquist/sniproxy
+-----------------------------------
+
+Allow IP address wildcard again, with warning enabled
+
+
 Features
 --------
 + Name-based proxying of HTTPS without decrypting traffic. No keys or

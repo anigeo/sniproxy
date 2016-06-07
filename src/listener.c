@@ -581,11 +581,10 @@ listener_lookup_server_address(const struct Listener *listener,
             warn("Invalid hostname %.*s in client request",
                     (int)name_len, name);
         } else if (address_is_sockaddr(new_addr)) {
-            warn("Refusing to proxy to socket address literal %.*s in request",
+            warn("Proxy to socket address literal %.*s in request",
                     (int)name_len, name);
 
-            free(new_addr);
-            new_addr = NULL;
+            address_set_port(new_addr, address_port(addr));
         } else if (address_port(addr) != 0) {
             /* We created a valid new_addr,
              * use the port from wildcard address if present */
