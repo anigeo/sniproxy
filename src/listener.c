@@ -523,7 +523,7 @@ listener_lookup_server_address(const struct Listener *listener,
             warn("Invalid hostname %.*s in client request",
                     (int)name_len, name);
         } else if (address_is_sockaddr(new_addr)) {
-            warn("Proxy to socket address literal %.*s in request",
+            info("Proxy to socket address literal %.*s in request",
                     (int)name_len, name);
 
             address_set_port(new_addr, address_port(addr));
