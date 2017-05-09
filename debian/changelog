@@ -1,3 +1,9 @@
+sniproxy (0.5.0-4-gd2f9d95-wildcard) unstable; urgency=low
+
+  * Allow IP address wildcard again with warning on 0.5.0
+
+ -- George Fan <anigeo@gmail.com>  Tue, 09 May 2017 10:31:02 +0800
+
 sniproxy (0.5.0) unstable; urgency=medium
 
   * Transparent proxy support
