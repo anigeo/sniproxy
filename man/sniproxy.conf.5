@@ -114,6 +114,7 @@ improve performance.
 listener 192.0.2.10:80 {
     protocol http
     reuseport yes
+    freebind yes
     table http_hosts
     fallback 192.0.2.100:80
     bad_requests log
@@ -139,6 +140,10 @@ which allows to run several sniproxy instances on the same ip:port pair.
 This enables us to evenly load-balance incoming connections between these instances
 without the use of any external load-balancing proxy. Requires Linux kernel 3.9+.
 Setting reuseport to "yes" enables this functionality.
+
+Freebind directive allows use of Any-IP feature, it will trigger IP_FREEBIND
+mode during socket creates, this controls both listening and source addresses.
+Requires Linux kernel 2.6.37+. Setting freebind to "yes" enables this functionality.
 
 Table specifies the name of the table used to lookup which server to forward
 the connection to based on the hostname extracted from the initial client

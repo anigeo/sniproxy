@@ -558,6 +558,19 @@ initiate_server_connect(struct Connection *con, struct ev_loop *loop) {
             return;
         }
 
+        if (con->listener->freebind == 1) {
+#ifdef IP_FREEBIND
+            result = setsockopt(sockfd, SOL_IP, IP_FREEBIND, &on, sizeof(on));
+#else
+            result = -EPERM;
+#endif
+            if (result < 0) {
+                err("setsockopt IP_FREEBIND failed: %s", strerror(errno));
+                close(sockfd);
+                return result;
+            }
+        }
+
         result = 0;
         int tries = 5;
         do {

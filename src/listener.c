@@ -309,6 +309,23 @@ accept_listener_reuseport(struct Listener *listener, char *reuseport) {
 }
 
 int
+accept_listener_freebind(struct Listener *listener, char *freebind) {
+    listener->freebind = parse_boolean(freebind);
+    if (listener->freebind == -1) {
+        return 0;
+    }
+
+#ifndef IP_FREEBIND
+    if (listener->freebind == 1) {
+        err("Freebind not supported in this build");
+        return 0;
+    }
+#endif
+
+    return 1;
+}
+
+int
 accept_listener_fallback_address(struct Listener *listener, char *fallback) {
     if (listener->fallback_address != NULL) {
         err("Duplicate fallback address: %s", fallback);
@@ -507,6 +524,19 @@ init_listener(struct Listener *listener, const struct Table_head *tables, struct
 #endif
         if (result < 0) {
             err("setsockopt SO_REUSEPORT failed: %s", strerror(errno));
+            close(sockfd);
+            return result;
+        }
+    }
+
+    if (listener->freebind == 1) {
+#ifdef IP_FREEBIND
+        result = setsockopt(sockfd, SOL_IP, IP_FREEBIND, &on, sizeof(on));
+#else
+        result = -ENOSYS;
+#endif
+        if (result < 0) {
+            err("setsockopt IP_FREEBIND failed: %s", strerror(errno));
             close(sockfd);
             return result;
         }
